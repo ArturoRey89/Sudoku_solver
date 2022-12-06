@@ -12,60 +12,72 @@ const solve = solver.solve;
 suite("Unit Tests", () => {
     suite("Solver.validate()", () => {
       test("handles a valid puzzle string of 81 characters", (done) => {
-        assert.fail()
-        done()
+        assert.isTrue(validate(validPuzzle));
+        done();
       })
       test("handles a puzzle string with invalid characters (not 1-9 or .)", (done) => {
-        assert.fail()
-        done()
+        assert.equal(invalidPuzzle1, { error: "Invalid characters in puzzle" });
+        assert.equal(invalidPuzzle2, { error: "Invalid characters in puzzle" });
+        assert.equal(invalidPuzzle3, { error: "Invalid characters in puzzle" });
+        done();
       })
       test("handles a puzzle string that is not 81 characters in length", (done) => {
-        assert.fail()
-        done()
+        assert.equal(invalidPuzzle4, {
+          error: "Expected puzzle to be 81 characters long",
+        });
+        done();
       })
     });
+
+
     suite("Solver.checkRowPlacement()", () => {
       test("handles a valid row placement", (done) => {
-        assert.fail()
-        done()
+        assert.fail(checkRow(validPuzzle, 2, 2, 2));
+        done();
       })
       test("handles an invalid row placement", (done) => {
         assert.fail()
-        done()
+        done();
       })
     });
+
+
     suite("Solver.checkColPlacement()", () => {
       test("handles a valid column placement", (done) => {
         assert.fail()
-        done()
+        done();
       })
       test("handles an invalid column placement", (done) => {
         assert.fail()
-        done()
+        done();
       })
     });
+
+
     suite("Solver.checkRegionPlacement()", () => {
       test("handles a valid region (3x3 grid) placement", (done) => {
         assert.fail()
-        done()
+        done();
       })
       test("handles an invalid region (3x3 grid) placement", (done) => {
         assert.fail()
-        done()
+        done();
       })
     });
+
+
     suite("Solver.solve()", () => {
       test("Valid puzzle strings pass the solver", (done) => {
         assert.fail()
-        done()
+        done();
       })
       test("Invalid puzzle strings fail the solver", (done) => {
         assert.fail()
-        done()
+        done();
       })
       test("Solver returns the expected solution for an incomplete puzzle", (done) => {
         assert.fail()
-        done()
+        done();
       })
     })
 });
