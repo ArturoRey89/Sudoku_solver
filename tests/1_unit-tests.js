@@ -2,12 +2,12 @@ const chai = require('chai');
 const assert = chai.assert;
 
 const Solver = require('../controllers/sudoku-solver.js');
-let solver = new Solver();
-let validate = solver.validate; 
-let checkRow = solver.checkRowPlacement;
-let checkCol = solver.checkColPlacement;
-let checkReg = solver.checkRegionPlacement;
-let solve = solver.solve;
+const solver = new Solver();
+const validate = solver.validate;
+const checkRow = solver.checkRowPlacement;
+const checkCol = solver.checkColPlacement;
+const checkReg = solver.checkRegionPlacement;
+const solve = solver.solve;
 
 suite("Unit Tests", () => {
     suite("Solver.validate()", () => {
@@ -69,3 +69,16 @@ suite("Unit Tests", () => {
       })
     })
 });
+
+const validPuzzle =
+  "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
+const invalidPuzzle1 =
+  "1.5..2.g4..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
+const invalidPuzzle2 =
+  "1.5..2.g4..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
+const invalidPuzzle3 =
+  "1.5..2.?4..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
+const invalidPuzzle4 =
+  "1.5..2.444..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
+const noSolutionPuzzle =
+  "1.5..2.84..83.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.";
