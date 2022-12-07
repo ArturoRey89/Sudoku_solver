@@ -12,7 +12,7 @@ const checkReg = solver.checkRegionPlacement;
 const solve = solver.solve;
 
 suite("Unit Tests", () => {
-    suite("Solver.validate()", () => {
+    suite("#Solver.validate()", () => {
       test("handles a valid puzzle string of 81 characters", (done) => {
         assert.isTrue(validate(validPuzzle1));
         done();
@@ -47,49 +47,43 @@ suite("Unit Tests", () => {
     });
 
 
-    suite("Solver.checkRowPlacement()", () => {
+    suite("#Solver.checkRowPlacement()", () => {
       test("handles a valid row placement", (done) => {
-        assert.isTrue(checkRow(validPuzzle1, 3, 1, 7).vailid);
+        assert.isTrue(checkRow(validPuzzle1, 3, 1, 7));
         done();
       })
       test("handles an invalid row placement", (done) => {
-        let rowError = checkRow(validPuzzle1, 2, 1, 7);
-        assert.isFalse(rowError.valid);
-        assert.equal(rowError.conflict[0], "row");
+        assert.isFalse(checkRow(validPuzzle1, 2, 1, 7));
         done();
       })
     });
 
 
-    suite("Solver.checkColPlacement()", () => {
+    suite("#Solver.checkColPlacement()", () => {
       test("handles a valid column placement", (done) => {
-        assert.isTrue(checkCol(validPuzzle1, 3, 1, 7).valid);
+        assert.isTrue(checkCol(validPuzzle1, 3, 1, 7));
         done();
       })
       test("handles an invalid column placement", (done) => {
-        let colError = checkRow(validPuzzle1, 3, 1, 8);
-        assert.isFalse(colError.valid);
-        assert.equal(colError.conflict[0], "column");
+        assert.isFalse(checkRow(validPuzzle1, 3, 1, 8));
         done();
       })
     });
 
 
-    suite("Solver.checkRegionPlacement()", () => {
+    suite("#Solver.checkRegionPlacement()", () => {
       test("handles a valid region (3x3 grid) placement", (done) => {
-        assert.isTrue(checkReg(validPuzzle1, 3, 1, 7).valid);
+        assert.isTrue(checkReg(validPuzzle1, 3, 1, 7));
         done();
       })
       test("handles an invalid region (3x3 grid) placement", (done) => {
-        let regError = checkRow(validPuzzle1, 3, 1, 6)
-        assert.isFalse(regError.valid);
-        assert.equal(regError.conflict[0], "region");
+        assert.isFalse(checkRow(validPuzzle1, 3, 1, 6));
         done();
       })
     });
 
 
-    suite("Solver.solve()", () => {
+    suite("#Solver.solve()", () => {
       test("Valid puzzle strings pass the solver", (done) => {
         assert.isEmpty(solve(validPuzzle1).error);
         assert.isEmpty(solve(validPuzzle2).error);
@@ -102,7 +96,7 @@ suite("Unit Tests", () => {
         assert.equal(solve(noSolutionPuzzle).error, "Puzzle cannot be solved");
         done();
       })
-      test("Solver returns the expected solution for an incomplete puzzle", (done) => {
+      test("returns the expected solution for an incomplete puzzle", (done) => {
         assert.equal(solve(validPuzzle1), Puzzles[0][1]);
         assert.equal(solve(validPuzzle2), Puzzles[1][1]);
         assert.equal(solve(validPuzzle3), Puzzles[2][1]);

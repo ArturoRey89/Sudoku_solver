@@ -12,7 +12,12 @@ class SudokuSolver {
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
-
+    let rowValues = puzzleString.slice(9*(row - 1), 9*row)
+    if (rowValues.indexOf(value) == -1 || rowValues.indexOf(value) == (column -1)) {
+        return true;
+    } else {
+      return false;
+    }
   }
 
   checkColPlacement(puzzleString, row, column, value) {
