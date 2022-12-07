@@ -84,26 +84,31 @@ suite("Unit Tests", () => {
 
     suite("#Solver.solve()", () => {
       test("Valid puzzle strings pass the solver", (done) => {
-        assert.isEmpty(solver.solve(validPuzzle1).error);
-        assert.isEmpty(solver.solve(validPuzzle2).error);
-        assert.isEmpty(solver.solve(validPuzzle3).error);
-        assert.isEmpty(solver.solve(validPuzzle4).error);
-        assert.isEmpty(solver.solve(validPuzzle5).error);
+        assert.isFalse(solver.solve(validPuzzle1).error);
+        assert.isFalse(solver.solve(validPuzzle2).error);
+        assert.isFalse(solver.solve(validPuzzle3).error);
+        assert.isFalse(solver.solve(validPuzzle4).error);
+        assert.isFalse(solver.solve(validPuzzle5).error);
+        assert.isString(solver.solve(validPuzzle1).solution);
+        assert.isString(solver.solve(validPuzzle2).solution);
+        assert.isString(solver.solve(validPuzzle3).solution);
+        assert.isString(solver.solve(validPuzzle4).solution);
+        assert.isString(solver.solve(validPuzzle5).solution);
         done();
       })
       test("Invalid puzzle strings fail the solver", (done) => {
         assert.equal(
-          solver.solve(noSolutionPuzzle).error,
+          new solver.solve(noSolutionPuzzle).error,
           "Puzzle cannot be solved"
         );
         done();
       })
       test("returns the expected solution for an incomplete puzzle", (done) => {
-        assert.equal(solver.solve(validPuzzle1), Puzzles[0][1]);
-        assert.equal(solver.solve(validPuzzle2), Puzzles[1][1]);
-        assert.equal(solver.solve(validPuzzle3), Puzzles[2][1]);
-        assert.equal(solver.solve(validPuzzle4), Puzzles[3][1]);
-        assert.equal(solver.solve(validPuzzle5), Puzzles[4][1]);
+        assert.equal(solver.solve(validPuzzle1).solution, Puzzles[0][1]);
+        assert.equal(solver.solve(validPuzzle2).solution, Puzzles[1][1]);
+        assert.equal(solver.solve(validPuzzle3).solution, Puzzles[2][1]);
+        assert.equal(solver.solve(validPuzzle4).solution, Puzzles[3][1]);
+        assert.equal(solver.solve(validPuzzle5).solution, Puzzles[4][1]);
         done();
       })
     })
