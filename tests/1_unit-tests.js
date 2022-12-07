@@ -10,28 +10,28 @@ const checkRow = solver.checkRowPlacement;
 const checkCol = solver.checkColPlacement;
 const checkReg = solver.checkRegionPlacement;
 const solve = solver.solve;
-console.log(validate)
+
 suite("Unit Tests", () => {
     suite("Solver.validate()", () => {
       test("handles a valid puzzle string of 81 characters", (done) => {
-        assert.isTrue(validate(validPuzzle));
+        assert.isTrue(validate(validPuzzle1));
         done();
       })
 
       test("handles a puzzle string with invalid characters (not 1-9 or .)", (done) => {
         assert.equal(
-          invalidPuzzle1,
-          { error: "Invalid characters in puzzle" },
+          validate(invalidPuzzle1).error,
+          "Invalid characters in puzzle",
           "should catch invalid 'g' in input"
         );
         assert.equal(
-          invalidPuzzle2,
-          { error: "Invalid characters in puzzle" },
+          validate(invalidPuzzle2).error,
+          "Invalid characters in puzzle",
           "should catch invalid '\\' in input"
         );
         assert.equal(
-          invalidPuzzle3,
-          { error: "Invalid characters in puzzle" },
+          validate(invalidPuzzle3).error,
+          "Invalid characters in puzzle",
           "should catch invalid '?' in input"
         );
         done();
@@ -39,7 +39,7 @@ suite("Unit Tests", () => {
 
       test("handles a puzzle string that is not 81 characters in length", (done) => {
         assert.equal(
-          invalidPuzzle4.error,
+          validate(invalidPuzzle4).error,
           "Expected puzzle to be 81 characters long"
         );
         done();
