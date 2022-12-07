@@ -55,9 +55,15 @@ class SudokuSolver {
   }
 
   solve(puzzleString) { 
+    console.log(this)
+    if (puzzleString.indexOf(".") === -1) {
+      console.log({ solution: puzzleString, error: false });
+      return { solution: puzzleString, error: false };
+    }
     let column;
     let row;
     let puzzleArray;
+    let noNewSolutionsFound = true;
     for (let index = 0; index < 81; index++) {
       column = (index % 9) + 1;
       row = Math.ceil((index + 1) / 9)
@@ -69,20 +75,22 @@ class SudokuSolver {
             this.checkColPlacement(puzzleString, row, column, value) &&
             this.checkRegionPlacement(puzzleString, row, column, value)
           ) {
-            console.log(value, [row,column])
             possibleSolutions.push(value);
           }
         }
         if (possibleSolutions.length === 1) {
+          noNewSolutionsFound = false;
           puzzleArray = puzzleString.split("");
           puzzleArray[index] = possibleSolutions;[0]
           puzzleString = puzzleArray.join("");
         }
       }
     }
-    console.log(puzzleString);
-    //col = index%9 + 1
-    //row = Math.ceil((index+1)/9)
+    if(noNewSolutionsFound) {
+      console.log({ solution: puzzleString, error: "Puzzle cannot be solved" });
+      return {solution: false, error: "Puzzle cannot be solved" };
+    }
+    this.solve(puzzleString); 
   }
 }
 
