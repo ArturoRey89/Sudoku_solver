@@ -21,11 +21,11 @@ class SudokuSolver {
   }
 
   checkColPlacement(puzzleString, row, column, value) {
-    let colValues = "";
+    let columnValues = "";
     for(let i=0; i<9; i++){
-      colValues += puzzleString.charAt(i*9 + column -1)
+      columnValues += puzzleString.charAt(i*9 + column -1)
     }
-    if (colValues.indexOf(value) == -1 || colValues.indexOf(value) == (row - 1)) {
+    if (columnValues.indexOf(value) == -1 || columnValues.indexOf(value) == (row - 1)) {
       return true;
     } else {
       return false;
@@ -33,11 +33,28 @@ class SudokuSolver {
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
-
+    let regionValues = "";
+    let regionUpperLeftCorner =
+      27 * Math.floor((row - 1) / 3) + Math.floor((column - 1) / 3) * 3;
+    for (
+      let i = regionUpperLeftCorner;
+      i <= regionUpperLeftCorner + 18;
+      i += 9
+    ) {
+      regionValues += puzzleString.slice(i, 3 + i);
+    }
+    let valueRegionPosition = 3*(row - 1)%3 + (column -1)%3;
+    if (
+      regionValues.indexOf(value) == -1 ||
+      regionValues.indexOf(value) == valueRegionPosition
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   solve(puzzleString) {
-    
   }
 }
 
