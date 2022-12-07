@@ -54,7 +54,35 @@ class SudokuSolver {
     }
   }
 
-  solve(puzzleString) {
+  solve(puzzleString) { 
+    let column;
+    let row;
+    let puzzleArray;
+    for (let index = 0; index < 81; index++) {
+      column = (index % 9) + 1;
+      row = Math.ceil((index + 1) / 9)
+      if (puzzleString[index] === ".") {
+        let possibleSolutions = [];
+        for (let value = 1; value <= 9; value++) {
+          if (
+            this.checkRowPlacement(puzzleString, row, column, value) &&
+            this.checkColPlacement(puzzleString, row, column, value) &&
+            this.checkRegionPlacement(puzzleString, row, column, value)
+          ) {
+            console.log(value, [row,column])
+            possibleSolutions.push(value);
+          }
+        }
+        if (possibleSolutions.length === 1) {
+          puzzleArray = puzzleString.split("");
+          puzzleArray[index] = possibleSolutions;[0]
+          puzzleString = puzzleArray.join("");
+        }
+      }
+    }
+    console.log(puzzleString);
+    //col = index%9 + 1
+    //row = Math.ceil((index+1)/9)
   }
 }
 
