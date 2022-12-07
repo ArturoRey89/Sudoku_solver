@@ -65,7 +65,7 @@ suite("Unit Tests", () => {
         done();
       })
       test("handles an invalid column placement", (done) => {
-        assert.isFalse(checkRow(validPuzzle1, 3, 1, 8));
+        assert.isFalse(checkCol(validPuzzle1, 3, 1, 8));
         done();
       })
     });
@@ -77,7 +77,7 @@ suite("Unit Tests", () => {
         done();
       })
       test("handles an invalid region (3x3 grid) placement", (done) => {
-        assert.isFalse(checkRow(validPuzzle1, 3, 1, 6));
+        assert.isFalse(checkReg(validPuzzle1, 3, 1, 6));
         done();
       })
     });
