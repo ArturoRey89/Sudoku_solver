@@ -5,11 +5,10 @@ const Solver = require('../controllers/sudoku-solver.js');
 const Puzzles = require("../controllers/puzzle-strings.js").puzzlesAndSolutions;
 
 const solver = new Solver();
-const validate = solver.validate;
-const checkRow = solver.checkRowPlacement;
-const checkCol = solver.checkColPlacement;
-const checkReg = solver.checkRegionPlacement;
-const solve = solver.solve;
+let validate = solver.validate;
+let checkRow = solver.checkRowPlacement;
+let checkCol = solver.checkColPlacement;
+let checkReg = solver.checkRegionPlacement;
 
 suite("Unit Tests", () => {
     suite("#Solver.validate()", () => {
@@ -85,23 +84,26 @@ suite("Unit Tests", () => {
 
     suite("#Solver.solve()", () => {
       test("Valid puzzle strings pass the solver", (done) => {
-        assert.isEmpty(solve(validPuzzle1).error);
-        assert.isEmpty(solve(validPuzzle2).error);
-        assert.isEmpty(solve(validPuzzle3).error);
-        assert.isEmpty(solve(validPuzzle4).error);
-        assert.isEmpty(solve(validPuzzle5).error);
+        assert.isEmpty(solver.solve(validPuzzle1).error);
+        assert.isEmpty(solver.solve(validPuzzle2).error);
+        assert.isEmpty(solver.solve(validPuzzle3).error);
+        assert.isEmpty(solver.solve(validPuzzle4).error);
+        assert.isEmpty(solver.solve(validPuzzle5).error);
         done();
       })
       test("Invalid puzzle strings fail the solver", (done) => {
-        assert.equal(solve(noSolutionPuzzle).error, "Puzzle cannot be solved");
+        assert.equal(
+          solver.solve(noSolutionPuzzle).error,
+          "Puzzle cannot be solved"
+        );
         done();
       })
       test("returns the expected solution for an incomplete puzzle", (done) => {
-        assert.equal(solve(validPuzzle1), Puzzles[0][1]);
-        assert.equal(solve(validPuzzle2), Puzzles[1][1]);
-        assert.equal(solve(validPuzzle3), Puzzles[2][1]);
-        assert.equal(solve(validPuzzle4), Puzzles[3][1]);
-        assert.equal(solve(validPuzzle5), Puzzles[4][1]);
+        assert.equal(solver.solve(validPuzzle1), Puzzles[0][1]);
+        assert.equal(solver.solve(validPuzzle2), Puzzles[1][1]);
+        assert.equal(solver.solve(validPuzzle3), Puzzles[2][1]);
+        assert.equal(solver.solve(validPuzzle4), Puzzles[3][1]);
+        assert.equal(solver.solve(validPuzzle5), Puzzles[4][1]);
         done();
       })
     })
