@@ -1,14 +1,16 @@
 class SudokuSolver {
-
   validate(puzzleString) {
-    if( puzzleString.length != 81 ) {
+    if (!puzzleString) {
+      return { error: "Required field missing", valid: false };
+    }
+    if (puzzleString.length != 81) {
       return {
         error: "Expected puzzle to be 81 characters long",
         valid: false,
       };
     }
-    const regex = /^[\d|\.]+$/
-    if ( !regex.test(puzzleString) ) {
+    const regex = /^[\d|\.]+$/;
+    if (!regex.test(puzzleString)) {
       return { error: "Invalid characters in puzzle", valid: false };
     }
     return { error: false, valid: true };
@@ -16,7 +18,10 @@ class SudokuSolver {
 
   checkRowPlacement(puzzleString, row, column, value) {
     let rowValues = puzzleString.slice(9 * (row - 1), 9 * row);
-    if (rowValues.indexOf(value) == -1 || rowValues.indexOf(value) == (column - 1)) {
+    if (
+      rowValues.indexOf(value) == -1 ||
+      rowValues.indexOf(value) == column - 1
+    ) {
       return true;
     } else {
       return false;
@@ -25,10 +30,13 @@ class SudokuSolver {
 
   checkColPlacement(puzzleString, row, column, value) {
     let columnValues = "";
-    for(let i=0; i<9; i++){
-      columnValues += puzzleString.charAt(i*9 + column -1)
+    for (let i = 0; i < 9; i++) {
+      columnValues += puzzleString.charAt(i * 9 + column - 1);
     }
-    if (columnValues.indexOf(value) == -1 || columnValues.indexOf(value) == (row - 1)) {
+    if (
+      columnValues.indexOf(value) == -1 ||
+      columnValues.indexOf(value) == row - 1
+    ) {
       return true;
     } else {
       return false;
@@ -46,7 +54,7 @@ class SudokuSolver {
     ) {
       regionValues += puzzleString.slice(i, 3 + i);
     }
-    let valueRegionPosition = 3*(row - 1)%3 + (column -1)%3;
+    let valueRegionPosition = 3 * ((row - 1) % 3) + ((column - 1) % 3);
     if (
       regionValues.indexOf(value) == -1 ||
       regionValues.indexOf(value) == valueRegionPosition
@@ -103,10 +111,9 @@ class SudokuSolver {
       }
       //continue recurtion
       this.solve(puzzleString);
-
     } catch (e) {
       this.solution = false;
-      this.error = "something whent wrong"
+      this.error = "something whent wrong";
       console.log(`${e}, on input ${puzzleString}`);
     }
   }
