@@ -6,22 +6,30 @@ const SudokuSolver = require("../controllers/sudoku-solver.js");
 module.exports = function (app) {
   let solver = new SudokuSolver();
   let solve = solver.solve.bind(solver);
+
+
   app.route("/api/check").post((req, res) => {
     const regexCoordinate = /^[A-Ia-i][1-9]$/;
     const regexValue = /^[1-9]$/;
     let { puzzle, coordinate, value } = req.body;
     let result = { valid: true };
     let conflict = [];
+    let validatePuzzle = solver.validate(puzzle)
 
+    //catch invalid input
+    if(!validatePuzzle.valid){
+      res.json({ error: validatePuzzle.error });
+      return;
+    }
+    if (!regexValue.test(value)) {
+      res.json({ error: "Invalid value" });
+      return;
+    }
     if (!regexCoordinate.test(coordinate)) {
       res.json({ error: "Invalid coordinate" });
       return;
     }
 
-    if (!regexValue.test(value)) {
-      res.json({ error: "Invalid value" });
-      return;
-    }
     let row = (coordinate.charCodeAt(0) - 32) % 32;
     let column = coordinate[1] * 1;
 
@@ -44,6 +52,7 @@ module.exports = function (app) {
 
     res.json(result);
   });
+
 
   app.route("/api/solve").post((req, res) => {
     let puzzle = req.body.puzzle;
