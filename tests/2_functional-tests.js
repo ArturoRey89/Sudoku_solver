@@ -2,7 +2,7 @@ const chai = require("chai");
 const chaiHttp = require('chai-http');
 const assert = chai.assert;
 const server = require('../server');
-
+const Puzzles = require("../controllers/puzzle-strings.js").puzzlesAndSolutions;
 chai.use(chaiHttp);
 
 suite('Functional Tests', () => {
@@ -11,9 +11,9 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/solve")
-          .send({ puzzle: "" })
+          .send({ puzzle: Puzzles[2][0] })
           .end((err, res) => {
-            assert.fail();
+            assert.equal(res.body.solution, Puzzles[2][1]);
             done();
           });
       })
@@ -23,7 +23,10 @@ suite('Functional Tests', () => {
           .post("/api/solve")
           .send({ puzzle: "" })
           .end((err, res) => {
-            assert.fail();
+            assert.equal(
+              res.body.error,
+              "Expected puzzle to be 81 characters long"
+            );
             done();
           });
       })
@@ -31,9 +34,12 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/solve")
-          .send({ puzzle: "" })
+          .send({
+            puzzle:
+              "1.5..2.\\4..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.",
+          })
           .end((err, res) => {
-            assert.fail();
+            assert.equal(res.body.error, "Invalid characters in puzzle");
             done();
           });
       })
@@ -41,9 +47,12 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/solve")
-          .send({puzzle: "" })
+          .send({ puzzle: Puzzles[2][0] + "23" })
           .end((err, res) => {
-            assert.fail();
+            assert.equal(
+              res.body.error,
+              "Expected puzzle to be 81 characters long"
+            );
             done();
           });
       })
@@ -51,9 +60,9 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/solve")
-          .send({ puzzle: "" })
+          .send({ puzzle: "1.5..2.84..83.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37." })
           .end((err, res) => {
-            assert.fail();
+            assert.equal(res.body.error, "Puzzle cannot be solved");
             done();
           });
       })
