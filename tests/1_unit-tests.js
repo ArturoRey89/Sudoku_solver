@@ -10,7 +10,7 @@ let solve = solver.solve.bind(solver);
 suite("Unit Tests", () => {
     suite("#Solver.validate()", () => {
       test("handles a valid puzzle string of 81 characters", (done) => {
-        assert.isTrue(solver.validate(validPuzzle1));
+        assert.isTrue(solver.validate(validPuzzle1).valid);
         done();
       })
 
