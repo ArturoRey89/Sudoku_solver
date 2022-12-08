@@ -7,21 +7,20 @@ module.exports = function (app) {
   let solver = new SudokuSolver();
   let solve = solver.solve.bind(solver);
 
-
   app.route("/api/check").post((req, res) => {
     const regexCoordinate = /^[A-Ia-i][1-9]$/;
     const regexValue = /^[1-9]$/;
     let { puzzle, coordinate, value } = req.body;
     let result = { valid: true };
     let conflict = [];
-    let validatePuzzle = solver.validate(puzzle)
+    let validatePuzzle = solver.validate(puzzle);
 
     //catch invalid input
-    if ((!puzzle || !coordinate || !value)) {
+    if (!puzzle || !coordinate || !value) {
       res.json({ error: "Required field(s) missing" });
       return;
     }
-    if(!validatePuzzle.valid){
+    if (!validatePuzzle.valid) {
       res.json({ error: validatePuzzle.error });
       return;
     }
@@ -57,11 +56,13 @@ module.exports = function (app) {
     res.json(result);
   });
 
-
   app.route("/api/solve").post((req, res) => {
     let puzzle = req.body.puzzle;
     let validInput = solver.validate(puzzle);
-
+    if (puzzle === "") {
+      res.json({ error: "Required field missing" });
+      return;
+    }
     if (validInput.valid) {
       solve(puzzle);
       if (solver.solution) {
