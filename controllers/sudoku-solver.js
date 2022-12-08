@@ -54,43 +54,59 @@ class SudokuSolver {
     }
   }
 
-  solve(puzzleString) { 
-    console.log(this)
-    if (puzzleString.indexOf(".") === -1) {
-      console.log({ solution: puzzleString, error: false });
-      return { solution: puzzleString, error: false };
-    }
-    let column;
-    let row;
-    let puzzleArray;
-    let noNewSolutionsFound = true;
-    for (let index = 0; index < 81; index++) {
-      column = (index % 9) + 1;
-      row = Math.ceil((index + 1) / 9)
-      if (puzzleString[index] === ".") {
-        let possibleSolutions = [];
-        for (let value = 1; value <= 9; value++) {
-          if (
-            this.checkRowPlacement(puzzleString, row, column, value) &&
-            this.checkColPlacement(puzzleString, row, column, value) &&
-            this.checkRegionPlacement(puzzleString, row, column, value)
-          ) {
-            possibleSolutions.push(value);
+  solve(puzzleString) {
+    try {
+      //Stop recurtion when solution is found
+      if (puzzleString.indexOf(".") === -1) {
+        this.solution = puzzleString;
+        this.error = false;
+        return this;
+      }
+
+      let column;
+      let row;
+      let puzzleArray;
+      let noNewSolutionsFound = true;
+      for (let index = 0; index < 81; index++) {
+        column = (index % 9) + 1;
+        row = Math.ceil((index + 1) / 9);
+        if (puzzleString[index] === ".") {
+          //find all numbers that dont conflict on row,column and region
+          let possibleSolutions = [];
+          for (let value = 1; value <= 9; value++) {
+            if (
+              this.checkRowPlacement(puzzleString, row, column, value) &&
+              this.checkColPlacement(puzzleString, row, column, value) &&
+              this.checkRegionPlacement(puzzleString, row, column, value)
+            ) {
+              possibleSolutions.push(value);
+            }
+          }
+          //add valid number if it's the only option
+          if (possibleSolutions.length === 1) {
+            noNewSolutionsFound = false;
+            puzzleArray = puzzleString.split("");
+            puzzleArray[index] = possibleSolutions;
+            [0];
+            puzzleString = puzzleArray.join("");
           }
         }
-        if (possibleSolutions.length === 1) {
-          noNewSolutionsFound = false;
-          puzzleArray = puzzleString.split("");
-          puzzleArray[index] = possibleSolutions;[0]
-          puzzleString = puzzleArray.join("");
-        }
       }
+      //Stop recurtion on NO solution
+      if (noNewSolutionsFound) {
+        this.solution = false;
+        this.error = "Puzzle cannot be solved";
+        return this;
+      }
+      //continue recurtion
+      this.solve(puzzleString);
+
+    } catch (e) {
+      this.solution = false;
+      this.error = "something whent wrong"
+      console.log(`${e}, on input ${puzzleString}`);
     }
-    if(noNewSolutionsFound) {
-      console.log({ solution: puzzleString, error: "Puzzle cannot be solved" });
-      return {solution: false, error: "Puzzle cannot be solved" };
-    }
-    this.solve(puzzleString); 
+    
   }
 }
 
