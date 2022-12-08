@@ -75,7 +75,7 @@ suite('Functional Tests', () => {
           .post("/api/check")
           .send({ puzzle: Puzzles[2][0], coordinate: "A1", value: 2 })
           .end((err, res) => {
-            assert.fail();
+            assert.isTrue(res.body.valid);
             done();
           });
       })
@@ -83,9 +83,9 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: Puzzles[2][0], coordinate: "a1", value: 2 })
+          .send({ puzzle: Puzzles[2][0], coordinate: "A1", value: "9" })
           .end((err, res) => {
-            assert.fail();
+            assert.sameMembers(res.body.conflict, ["row"]);
             done();
           });
       })
@@ -93,9 +93,9 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: Puzzles[2][0], coordinate: "i9", value: 2 })
+          .send({ puzzle: Puzzles[2][0], coordinate: "A1", value: "4" })
           .end((err, res) => {
-            assert.fail();
+            assert.sameMembers(res.body.conflict, ["column", "region"]);
             done();
           });
       })
@@ -103,19 +103,19 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "a2", value: "" })
+          .send({ puzzle: Puzzles[2][0], coordinate: "A1", value: "7" })
           .end((err, res) => {
-            assert.fail()
-            done()
+            assert.sameMembers(res.body.conflict, ["row", "column", "region"]);
+            done();
           });
       })
       test("Check a puzzle placement with missing required fields", (done) => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "aa22", value: "" })
+          .send({ puzzle: "", coordinate: "a2", value: "" })
           .end((err, res) => {
-            assert.fail()
+            assert.equal(res.body.error, "Required field(s) missing");
             done()
           });
       })
@@ -123,40 +123,45 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "a22", value: "" })
+          .send({
+            puzzle:
+              "..839.7.575.....964..1.......16.29846.9.312.7..754.....62..5.78.8...3.2...492..1m",
+            coordinate: "a2",
+            value: 2,
+          })
           .end((err, res) => {
-            assert.fail()
-            done()
+            assert.equal(res.body.error, "Invalid characters in puzzle");
+            done();
           });
       })
       test("Check a puzzle placement with incorrect length", (done) => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: "111....111", coordinate: "aA2", value: "11" })
           .end((err, res) => {
-            assert.fail()
-            done()
+            assert.equal(res.body.error, "Expected puzzle to be 81 characters long");
+            done();
           });
       })
       test("Check a puzzle placement with invalid placement coordinate", (done) => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: Puzzles[2][0], coordinate: "J1", value: 2 })
           .end((err, res) => {
-            assert.fail()
-            done()
+            assert.equal(res.body.error, "Invalid coordinate");
+            done();
           });
       })
       test("Check a puzzle placement with invalid placement value", (done) => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: Puzzles[2][0], coordinate: "J9", value: 22 })
           .end((err, res) => {
-            assert.fail()
-            done()
+            assert.equal(res.body.error, "Invalid value");
+            done();
           });
       })
     });
