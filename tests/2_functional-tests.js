@@ -73,37 +73,37 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/check")
-          .send({puzzle: "" ,coordinate: "",value: ""})
-          .end((err,res) => {
-            assert.fail()
-            done()
+          .send({ puzzle: Puzzles[2][0], coordinate: "A1", value: 2 })
+          .end((err, res) => {
+            assert.fail();
+            done();
           });
       })
       test("Check a puzzle placement with single placement conflict", (done) => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: Puzzles[2][0], coordinate: "a1", value: 2 })
           .end((err, res) => {
-            assert.fail()
-            done()
+            assert.fail();
+            done();
           });
       })
       test("Check a puzzle placement with multiple placement conflicts", (done) => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: Puzzles[2][0], coordinate: "i9", value: 2 })
           .end((err, res) => {
-            assert.fail()
-            done()
+            assert.fail();
+            done();
           });
       })
       test("Check a puzzle placement with all placement conflicts", (done) => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: "", coordinate: "a2", value: "" })
           .end((err, res) => {
             assert.fail()
             done()
@@ -113,7 +113,7 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: "", coordinate: "aa22", value: "" })
           .end((err, res) => {
             assert.fail()
             done()
@@ -123,7 +123,7 @@ suite('Functional Tests', () => {
         chai
           .request(server)
           .post("/api/check")
-          .send({ puzzle: "", coordinate: "", value: "" })
+          .send({ puzzle: "", coordinate: "a22", value: "" })
           .end((err, res) => {
             assert.fail()
             done()
