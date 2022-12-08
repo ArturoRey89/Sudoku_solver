@@ -5,31 +5,28 @@ const Solver = require('../controllers/sudoku-solver.js');
 const Puzzles = require("../controllers/puzzle-strings.js").puzzlesAndSolutions;
 
 const solver = new Solver();
-let validate = solver.validate;
-let checkRow = solver.checkRowPlacement;
-let checkCol = solver.checkColPlacement;
-let checkReg = solver.checkRegionPlacement;
+let solve = solver.solve.bind(solver);
 
 suite("Unit Tests", () => {
     suite("#Solver.validate()", () => {
       test("handles a valid puzzle string of 81 characters", (done) => {
-        assert.isTrue(validate(validPuzzle1));
+        assert.isTrue(solver.validate(validPuzzle1));
         done();
       })
 
       test("handles a puzzle string with invalid characters (not 1-9 or .)", (done) => {
         assert.equal(
-          validate(invalidPuzzle1).error,
+          solver.validate(invalidPuzzle1).error,
           "Invalid characters in puzzle",
           "should catch invalid 'g' in input"
         );
         assert.equal(
-          validate(invalidPuzzle2).error,
+          solver.validate(invalidPuzzle2).error,
           "Invalid characters in puzzle",
           "should catch invalid '\\' in input"
         );
         assert.equal(
-          validate(invalidPuzzle3).error,
+          solver.validate(invalidPuzzle3).error,
           "Invalid characters in puzzle",
           "should catch invalid '?' in input"
         );
@@ -38,7 +35,7 @@ suite("Unit Tests", () => {
 
       test("handles a puzzle string that is not 81 characters in length", (done) => {
         assert.equal(
-          validate(invalidPuzzle4).error,
+          solver.validate(invalidPuzzle4).error,
           "Expected puzzle to be 81 characters long"
         );
         done();
@@ -48,11 +45,11 @@ suite("Unit Tests", () => {
 
     suite("#Solver.checkRowPlacement()", () => {
       test("handles a valid row placement", (done) => {
-        assert.isTrue(checkRow(validPuzzle1, 3, 1, 7));
+        assert.isTrue(solver.checkRowPlacement(validPuzzle1, 3, 1, 7));
         done();
       })
       test("handles an invalid row placement", (done) => {
-        assert.isFalse(checkRow(validPuzzle1, 2, 1, 7));
+        assert.isFalse(solver.checkRowPlacement(validPuzzle1, 2, 1, 7));
         done();
       })
     });
@@ -60,11 +57,11 @@ suite("Unit Tests", () => {
 
     suite("#Solver.checkColPlacement()", () => {
       test("handles a valid column placement", (done) => {
-        assert.isTrue(checkCol(validPuzzle1, 3, 1, 7));
+        assert.isTrue(solver.checkColPlacement(validPuzzle1, 3, 1, 7));
         done();
       })
       test("handles an invalid column placement", (done) => {
-        assert.isFalse(checkCol(validPuzzle1, 3, 1, 8));
+        assert.isFalse(solver.checkColPlacement(validPuzzle1, 3, 1, 8));
         done();
       })
     });
@@ -72,43 +69,55 @@ suite("Unit Tests", () => {
 
     suite("#Solver.checkRegionPlacement()", () => {
       test("handles a valid region (3x3 grid) placement", (done) => {
-        assert.isTrue(checkReg(validPuzzle1, 3, 1, 7));
+        assert.isTrue(solver.checkRegionPlacement(validPuzzle1, 3, 1, 7));
         done();
       })
       test("handles an invalid region (3x3 grid) placement", (done) => {
-        assert.isFalse(checkReg(validPuzzle1, 3, 1, 6));
+        assert.isFalse(solver.checkRegionPlacement(validPuzzle1, 3, 1, 6));
         done();
       })
     });
 
-
     suite("#Solver.solve()", () => {
       test("Valid puzzle strings pass the solver", (done) => {
-        assert.isFalse(solver.solve(validPuzzle1).error);
-        assert.isFalse(solver.solve(validPuzzle2).error);
-        assert.isFalse(solver.solve(validPuzzle3).error);
-        assert.isFalse(solver.solve(validPuzzle4).error);
-        assert.isFalse(solver.solve(validPuzzle5).error);
-        assert.isString(solver.solve(validPuzzle1).solution);
-        assert.isString(solver.solve(validPuzzle2).solution);
-        assert.isString(solver.solve(validPuzzle3).solution);
-        assert.isString(solver.solve(validPuzzle4).solution);
-        assert.isString(solver.solve(validPuzzle5).solution);
+        solve(validPuzzle1);
+        assert.isFalse(solver.error);
+        assert.isString(solver.solution);
+
+        solve(validPuzzle2);
+        assert.isFalse(solver.error);
+        assert.isString(solver.solution);
+
+        solve(validPuzzle3);
+        assert.isFalse(solver.error);
+        assert.isString(solver.solution);
+
+        solve(validPuzzle4);
+        assert.isFalse(solver.error);
+        assert.isString(solver.solution);
+
+        solve(validPuzzle5);
+        assert.isFalse(solver.error);
+        assert.isString(solver.solution);
         done();
       })
       test("Invalid puzzle strings fail the solver", (done) => {
-        assert.equal(
-          new solver.solve(noSolutionPuzzle).error,
-          "Puzzle cannot be solved"
-        );
+        solve(noSolutionPuzzle);
+        assert.isFalse(solver.solution)
+        assert.equal(solver.error, "Puzzle cannot be solved");
         done();
       })
       test("returns the expected solution for an incomplete puzzle", (done) => {
-        assert.equal(solver.solve(validPuzzle1).solution, Puzzles[0][1]);
-        assert.equal(solver.solve(validPuzzle2).solution, Puzzles[1][1]);
-        assert.equal(solver.solve(validPuzzle3).solution, Puzzles[2][1]);
-        assert.equal(solver.solve(validPuzzle4).solution, Puzzles[3][1]);
-        assert.equal(solver.solve(validPuzzle5).solution, Puzzles[4][1]);
+        solve(validPuzzle1);
+        assert.equal(solver.solution, Puzzles[0][1]);
+        solve(validPuzzle2);
+        assert.equal(solver.solution, Puzzles[1][1]);
+        solve(validPuzzle3);
+        assert.equal(solver.solution, Puzzles[2][1]);
+        solve(validPuzzle4);
+        assert.equal(solver.solution, Puzzles[3][1]);
+        solve(validPuzzle5);
+        assert.equal(solver.solution, Puzzles[4][1]);
         done();
       })
     })
