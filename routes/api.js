@@ -14,6 +14,20 @@ module.exports = function (app) {
     
   app.route('/api/solve')
     .post((req, res) => {
-      res.send("");
+      let puzzle = req.body.puzzle;
+      let validInput = solver.validate(puzzle);
+      console.log(validInput);
+      if (validInput.valid) {
+        solve(puzzle);
+        if (solver.solution) {
+          res.json({ solution: solver.solution });
+        } else {
+          res.json({ error: solver.error });
+        }
+      } else if (validInput.error) {
+        res.send({ error: validInput.error });
+      } else {
+        res.json({ error: "unknown error" });
+      }
     });
 };

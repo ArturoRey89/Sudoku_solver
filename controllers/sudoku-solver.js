@@ -109,7 +109,6 @@ class SudokuSolver {
       this.error = "something whent wrong"
       console.log(`${e}, on input ${puzzleString}`);
     }
-    
   }
 }
 
