@@ -23,10 +23,7 @@ suite('Functional Tests', () => {
           .post("/api/solve")
           .send({ puzzle: "" })
           .end((err, res) => {
-            assert.equal(
-              res.body.error,
-              "Expected puzzle to be 81 characters long"
-            );
+            assert.equal(res.body.error, "Required field missing");
             done();
           });
       })
