@@ -17,6 +17,10 @@ module.exports = function (app) {
     let validatePuzzle = solver.validate(puzzle)
 
     //catch invalid input
+    if ((!puzzle || !coordinate || !value)) {
+      res.json({ error: "Required field(s) missing" });
+      return;
+    }
     if(!validatePuzzle.valid){
       res.json({ error: validatePuzzle.error });
       return;
